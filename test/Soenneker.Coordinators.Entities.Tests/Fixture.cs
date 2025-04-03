@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Soenneker.Fixtures.Unit;
 using Soenneker.Utils.Test;
-using Soenneker.Coordinators.Entities.Registrars;
 
 namespace Soenneker.Coordinators.Entities.Tests;
 
@@ -25,7 +24,5 @@ public sealed class Fixture : UnitFixture
 
         IConfiguration config = TestUtil.BuildConfig();
         services.AddSingleton(config);
-
-        services.AddEntitiesCoordinatorAsScoped();
     }
 }
