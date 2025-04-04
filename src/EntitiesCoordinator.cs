@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Soenneker.Dtos.IdNamePair;
 using Soenneker.Dtos.RequestDataOptions;
 
 namespace Soenneker.Coordinators.Entities;
@@ -23,12 +22,12 @@ public class EntitiesCoordinator<TRequest, TResponse> : BaseCoordinator, IEntiti
         throw new NotSupportedException();
     }
 
-    public virtual ValueTask<List<TResponse>> GetList(RequestDataOptions options, CancellationToken cancellationToken = default)
+    public virtual ValueTask<List<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default)
     {
         throw new NotSupportedException();
     }
 
-    public virtual ValueTask<IdNamePair> Create(TRequest request, CancellationToken cancellationToken = default)
+    public virtual ValueTask<TResponse> Create(TRequest request, CancellationToken cancellationToken = default)
     {
         throw new NotSupportedException();
     }

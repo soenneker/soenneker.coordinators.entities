@@ -1,5 +1,4 @@
 ﻿using Soenneker.Coordinators.Base.Abstract;
-using Soenneker.Dtos.IdNamePair;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Threading;
@@ -31,7 +30,7 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities.</returns>
     [Pure]
-    ValueTask<List<TResponse>> GetList(RequestDataOptions options, CancellationToken cancellationToken = default);
+    ValueTask<List<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Creates a new entity based on the provided request.
@@ -39,7 +38,7 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// <param name="request">The request data for the entity to be created.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the identifier and name of the created entity.</returns>
-    ValueTask<IdNamePair> Create(TRequest request, CancellationToken cancellationToken = default);
+    ValueTask<TResponse> Create(TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing entity with the given identifier using the provided request data.
