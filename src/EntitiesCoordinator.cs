@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 using Soenneker.Coordinators.Base;
 using Soenneker.Coordinators.Entities.Abstract;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Dtos.RequestDataOptions;
+using Soenneker.Dtos.Results.Paged;
 
 namespace Soenneker.Coordinators.Entities;
 
@@ -22,7 +22,7 @@ public class EntitiesCoordinator<TRequest, TResponse> : BaseCoordinator, IEntiti
         throw new NotSupportedException();
     }
 
-    public virtual ValueTask<List<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default)
+    public virtual ValueTask<PagedResult<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default)
     {
         throw new NotSupportedException();
     }

@@ -1,9 +1,9 @@
 ﻿using Soenneker.Coordinators.Base.Abstract;
-using System.Collections.Generic;
+using Soenneker.Dtos.RequestDataOptions;
+using Soenneker.Dtos.Results.Paged;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
-using Soenneker.Dtos.RequestDataOptions;
 
 namespace Soenneker.Coordinators.Entities.Abstract;
 
@@ -30,7 +30,7 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities.</returns>
     [Pure]
-    ValueTask<List<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default);
+    ValueTask<PagedResult<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Creates a new entity based on the provided request.
