@@ -41,7 +41,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Soenneker.Coordinators.Base" Version="4.0.1019" />
+      <PackageReference Include="Soenneker.Coordinators.Base" Version="4.0.1020" />
       <PackageReference Include="Soenneker.Dtos.RequestDataOptions" Version="4.0.104" />
       <PackageReference Include="Soenneker.Dtos.Results.Paged" Version="4.0.21" />
     </ItemGroup>
