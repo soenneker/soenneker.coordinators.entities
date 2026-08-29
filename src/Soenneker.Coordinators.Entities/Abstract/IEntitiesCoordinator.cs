@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Coordinators.Entities.Abstract;
 
-/// <summary>
-/// Defines common entity operations such as Get, List, Create, Update, and Delete for a specific request and response type.
-/// </summary>
-/// <typeparam name="TRequest">The type of the request object used for creating or updating entities.</typeparam>
-/// <typeparam name="TResponse">The type of the response object returned by the operations.</typeparam>
 public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
 {
     /// <summary>
     /// Retrieves an entity by its identifier.
     /// </summary>
-    /// <param name="id">The identifier of the entity.</param>
+    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
+    /// <returns>A task whose result is the response returned by get.</returns>
     [Pure]
     ValueTask<TResponse> Get(string id, CancellationToken cancellationToken = default);
 
@@ -28,7 +23,7 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// </summary>
     /// <param name="options">The request options for filtering, paging, and sorting.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities.</returns>
+    /// <returns>A task whose result is the requested paged Result.</returns>
     [Pure]
     ValueTask<PagedResult<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default);
 
@@ -37,23 +32,23 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// </summary>
     /// <param name="request">The request data for the entity to be created.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the identifier and name of the created entity.</returns>
+    /// <returns>A task whose result is the response returned by create.</returns>
     ValueTask<TResponse> Create(TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing entity with the given identifier using the provided request data.
     /// </summary>
-    /// <param name="id">The identifier of the entity to update.</param>
-    /// <param name="request">The updated data for the entity.</param>
+    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
+    /// <param name="request">request that defines the request to send.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the updated entity.</returns>
+    /// <returns>A task whose result is the response returned by update.</returns>
     ValueTask<TResponse> Update(string id, TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the entity with the specified identifier.
     /// </summary>
-    /// <param name="id">The identifier of the entity to delete.</param>
+    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <returns>A task that completes after the targeted files have been deleted.</returns>
     ValueTask Delete(string id, CancellationToken cancellationToken = default);
 }
