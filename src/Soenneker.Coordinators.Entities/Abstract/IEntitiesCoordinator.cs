@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Coordinators.Entities.Abstract;
 
+/// <summary>
+/// Coordinates entity retrieval and mutation requests through the configured repositories.
+/// </summary>
 public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
 {
     /// <summary>
