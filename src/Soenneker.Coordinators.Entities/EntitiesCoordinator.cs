@@ -11,7 +11,7 @@ using Soenneker.Dtos.Results.Paged;
 namespace Soenneker.Coordinators.Entities;
 
 /// <inheritdoc cref="IEntitiesCoordinator{TRequest, TResponse}"/>
-public class EntitiesCoordinator<TRequest, TResponse> : BaseCoordinator, IEntitiesCoordinator<TRequest, TResponse>
+public abstract class EntitiesCoordinator<TRequest, TResponse> : BaseCoordinator, IEntitiesCoordinator<TRequest, TResponse>
 {
     public EntitiesCoordinator(IConfiguration configuration, ILogger<EntitiesCoordinator<TRequest, TResponse>> logger) : base(configuration, logger)
     {

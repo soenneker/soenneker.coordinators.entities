@@ -15,9 +15,9 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// <summary>
     /// Retrieves an entity by its identifier.
     /// </summary>
-    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
+    /// <param name="id">Identifier of the entity to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task whose result is the response returned by get.</returns>
+    /// <returns>A task whose result is the entity response.</returns>
     [Pure]
     ValueTask<TResponse> Get(string id, CancellationToken cancellationToken = default);
 
@@ -26,7 +26,7 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// </summary>
     /// <param name="options">The request options for filtering, paging, and sorting.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task whose result is the requested paged Result.</returns>
+    /// <returns>A task whose result is the requested page.</returns>
     [Pure]
     ValueTask<PagedResult<TResponse>> GetAll(RequestDataOptions options, CancellationToken cancellationToken = default);
 
@@ -35,23 +35,23 @@ public interface IEntitiesCoordinator<in TRequest, TResponse> : IBaseCoordinator
     /// </summary>
     /// <param name="request">The request data for the entity to be created.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task whose result is the response returned by create.</returns>
+    /// <returns>A task whose result is the created entity response.</returns>
     ValueTask<TResponse> Create(TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing entity with the given identifier using the provided request data.
     /// </summary>
-    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
-    /// <param name="request">request that defines the request to send.</param>
+    /// <param name="id">Identifier of the entity to update.</param>
+    /// <param name="request">The replacement or update data.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task whose result is the response returned by update.</returns>
+    /// <returns>A task whose result is the updated entity response.</returns>
     ValueTask<TResponse> Update(string id, TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the entity with the specified identifier.
     /// </summary>
-    /// <param name="id">Identifier of the entities coordinator instance or registration to target.</param>
+    /// <param name="id">Identifier of the entity to delete.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A task that completes after the targeted files have been deleted.</returns>
+    /// <returns>A task that completes when deletion finishes.</returns>
     ValueTask Delete(string id, CancellationToken cancellationToken = default);
 }

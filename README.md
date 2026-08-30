@@ -5,7 +5,7 @@
 
 # Soenneker.Coordinators.Entities
 
-Coordinates entity retrieval and mutation requests through the configured repositories.
+Defines a generic CRUD coordinator contract and an abstract base class for application-specific entity coordinators.
 
 ## Install
 
@@ -13,31 +13,59 @@ Coordinates entity retrieval and mutation requests through the configured reposi
 dotnet add package Soenneker.Coordinators.Entities
 ```
 
-## Quick start
+## Implement a coordinator
 
 ```csharp
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Soenneker.Coordinators.Entities;
 using Soenneker.Coordinators.Entities.Abstract;
 
-IEntitiesCoordinator<TRequest, TResponse> entitiesCoordinator = /* resolve from DI */;
-var result = await entitiesCoordinator.Get("value", default);
+public sealed class CustomerCoordinator : EntitiesCoordinator<CustomerRequest, CustomerResponse>
+{
+    private readonly ICustomerRepository _repository;
+
+    public CustomerCoordinator(
+        IConfiguration configuration,
+        ILogger<CustomerCoordinator> logger,
+        ICustomerRepository repository)
+        : base(configuration, logger)
+    {
+        _repository = repository;
+    }
+
+    public override ValueTask<CustomerResponse> Get(string id, CancellationToken cancellationToken = default)
+    {
+        return _repository.Get(id, cancellationToken);
+    }
+}
 ```
 
-Retrieves an entity by its identifier.
+The base methods are virtual and throw `NotSupportedException`. Override every operation your coordinator supports; leaving a method unchanged explicitly makes that operation unsupported.
 
-## What you get
+## Registration
 
-- `IEntitiesCoordinator<TRequest, TResponse>` — Coordinates entity retrieval and mutation requests through the configured repositories.
+This package does not register open or closed generic services. Register each application implementation explicitly:
 
-## API at a glance
+```csharp
+services.AddScoped<
+    IEntitiesCoordinator<CustomerRequest, CustomerResponse>,
+    CustomerCoordinator>();
+```
+
+## Contract
 
 | API | What it does | Result / important behavior |
 | --- | --- | --- |
-| `IEntitiesCoordinator<TRequest, TResponse>.Get(id, cancellationToken)` | Retrieves an entity by its identifier. | A task whose result is the response returned by get. |
-| `IEntitiesCoordinator<TRequest, TResponse>.GetAll(options, cancellationToken)` | Retrieves a list of entities based on the specified request options. | A task whose result is the requested paged Result. |
-| `IEntitiesCoordinator<TRequest, TResponse>.Create(request, cancellationToken)` | Creates a new entity based on the provided request. | A task whose result is the response returned by create. |
-| `IEntitiesCoordinator<TRequest, TResponse>.Update(id, request, cancellationToken)` | Updates an existing entity with the given identifier using the provided request data. | A task whose result is the response returned by update. |
-| `IEntitiesCoordinator<TRequest, TResponse>.Delete(id, cancellationToken)` | Deletes the entity with the specified identifier. | Completes when the requested deletion has finished. |
+| `Get(id, cancellationToken)` | Retrieves one entity | `TResponse` |
+| `GetAll(options, cancellationToken)` | Retrieves a filtered, sorted, or paged collection as interpreted by the implementation | `PagedResult<TResponse>` |
+| `Create(request, cancellationToken)` | Creates an entity | `TResponse` |
+| `Update(id, request, cancellationToken)` | Updates an entity | `TResponse` |
+| `Delete(id, cancellationToken)` | Deletes an entity | Completion only |
 
 ## Practical notes
 
-- Cancellation stops pending work; it does not undo work that has already completed.
+- The base class supplies protected `Config` and `Logger` properties through `Soenneker.Coordinators.Base`; it has no repository dependency or persistence behavior.
+- `RequestDataOptions` is only part of the contract. Filtering, sorting, paging, and validation are the implementation's responsibility.
+- Cancellation tokens must be forwarded by overrides to their underlying database, HTTP, or queue operations.
+- Decide and document each implementation's not-found, conflict, validation, and concurrency behavior; the generic contract does not prescribe them.
